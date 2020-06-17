@@ -2,11 +2,26 @@ var td_errs = [];
 var predictions = [];
 var cumulants = [];
 
+function calculate_return(cumulants, gamma){
+    var return_cumulant = cumulants.slice();
+    if (return_cumulant.length > 2){
+        for (var i = return_cumulant.length - 2; i >= 0; i--) {
+            return_cumulant[i] = (return_cumulant[i] + return_cumulant[i+1]*gamma)
+        }
+        return return_cumulant.map(x => x/(1/(1-gamma)))
+    }else{
+        return []
+    }
+}
+
 function plot_data(){
+    var return_cumulant = calculate_return(cumulants, document.getElementById("gamma").value)
     var ctx = document.getElementById("graph").getContext('2d');
     ctx.responsive = true;
     var time_steps = Array.from(Array(predictions.length).keys())
-    console.log(time_steps)
+    predictions = predictions.slice(-1000);
+    cumulants = cumulants.slice(-1000);
+    return_cumulant = return_cumulant.slice(-1000);
     var myChart = new Chart(ctx,
                     {
                         type: 'line',
@@ -16,9 +31,26 @@ function plot_data(){
                                 label: 'prediction',
                                 data: predictions,
                                 borderWidth: 1,
+                                fill: false,
                                 // borderColor: 'rgb(235, 255, 236)',
                                 // pointBackgroundColor: 'rgb(235, 255, 236)',
-                            }]
+                            },
+                            {
+                                label: 'cumulant',
+                                data: cumulants,
+                                borderColor: 'rgb(148,0,211)',
+                                borderWidth: 1,
+                                fill: false
+
+                            },
+                            {
+                                label: 'true return',
+                                data: return_cumulant,
+                                borderColor: 'rgb(235, 201, 52)',
+                                borderWidth: 1,
+                                fill: false,
+                            }
+                            ]
                         },
                         options: {
                             title: {
@@ -82,7 +114,6 @@ function set_data(result){
     for(var i=0; i < states.length; i++){
         this_select_content += '<option value="' + states[i] + '">' + states[i] + '</option>';
         }
-    console.log(this_select_content)
     $("#cumulant").empty().append(this_select_content);
 
     document.getElementById("time-step-counter").innerHTML = "Steps: " + result['steps'];
@@ -92,7 +123,7 @@ function set_data(result){
 
 //    predictions.push(data['prediction']);
     predictions.push(result['prediction']);
-    console.log(result['prediction']);
+    cumulants.push(result['is_moving']);
     plot_data();
 }
 

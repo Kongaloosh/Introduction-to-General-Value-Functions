@@ -23,18 +23,19 @@ def simulator():
         data = request.json
 
         if data == None or data['steps'] == 'null':
+            mem = 1024
             return jsonify({
                 "steps": 0,
                 "normalized_position": 0,
                 "normalized_load": 0,
                 "normalized_velocity": 0,
                 "tilings":1,
-                "memory": 64,
-                "phi_next": np.zeros(64).tolist(),
-                "phi": np.zeros(64).tolist(),
+                "memory": mem,
+                "phi_next": np.zeros(mem).tolist(),
+                "phi": np.zeros(mem).tolist(),
                 "td_error": 0,
-                "traces": np.zeros(64).tolist(),
-                "weights": np.zeros(64).tolist(),
+                "traces": np.zeros(mem).tolist(),
+                "weights": np.zeros(mem).tolist(),
                 "prediction": 0,
                 "gamma": 0.9,
                 "lambda": 0.0,
@@ -45,7 +46,8 @@ def simulator():
         for key in ["phi", "phi_next", "weights", "traces"]:
             data[key] = np.array([float(i) for i in data[key].split(',')])
 
-        for key in ["steps",
+        for key in [
+                "steps",
                 "normalized_position",
                 "normalized_load",
                 "normalized_velocity",
@@ -58,20 +60,25 @@ def simulator():
                 "step_size"]:
             data[key] = float(data[key])
 
-        data["steps"], data["normalized_position"], data["normalized_load"], data["normalized_velocity"] = \
+        data["steps"], \
+        data["normalized_position"], \
+        data["normalized_load"], \
+        data["normalized_velocity"], \
+        data["is_moving"] = \
             get_state(data['steps'],data['normalized_position'],data['normalized_load'], data['normalized_velocity'])
+
         # update the feature-vector
         data["phi"] = data["phi_next"]
         data["phi_next"] = np.zeros(int(data['memory']))
         active_features = get_tiles(
             int(data["tilings"]),
             int(data["memory"]),
-            np.array([data["normalized_position"], data["normalized_load"]])*10
+            np.array([data["normalized_position"], data["normalized_load"], data['is_moving']])*100
         )
         data["phi_next"][active_features] = 1.
         # calculate the temporal-difference error
         data["td_error"] = td.calculate_temporal_difference_error(
-            data['weights'], data["normalized_position"], data["gamma"], data["phi_next"], data["phi"]
+            data['weights'], data["is_moving"], data["gamma"], data["phi_next"], data["phi"]
         )
         # calculate the new eligibility traces
         data["traces"] = td.replace(data["traces"], data["gamma"], data["lambda"] ,data["phi_next"])

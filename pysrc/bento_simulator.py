@@ -1,7 +1,7 @@
 
 def get_state(steps, normalized_position, normalized_load, normalized_velocity):
     """Takes the current state of the simulated bento arm and updates it."""
-    sim_velocity = 0.01  # simulation velocity
+    sim_velocity = 0.1  # simulation velocity
     steps += 1
 
     # Simulate the shoulder moving back and forth between positions 0 and 1
@@ -18,5 +18,5 @@ def get_state(steps, normalized_position, normalized_load, normalized_velocity):
     else:
         is_moving = 0
 
-    return steps, normalized_position, normalized_load, normalized_velocity
+    return steps, normalized_position, normalized_load, normalized_velocity, is_moving
 
