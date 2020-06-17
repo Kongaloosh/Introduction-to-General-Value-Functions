@@ -40,7 +40,7 @@ def simulator():
                 "lambda": 0.0,
                 "step_size": 0.1,
             })
-        print(data)
+
         # fetch the next time-step's values
         for key in ["phi", "phi_next", "weights", "traces"]:
             data[key] = np.array([float(i) for i in data[key].split(',')])
@@ -63,7 +63,6 @@ def simulator():
         # update the feature-vector
         data["phi"] = data["phi_next"]
         data["phi_next"] = np.zeros(int(data['memory']))
-        print(np.array([data["normalized_position"], data["normalized_load"]])*10)
         active_features = get_tiles(
             int(data["tilings"]),
             int(data["memory"]),

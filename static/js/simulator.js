@@ -1,3 +1,65 @@
+var td_errs = [];
+var predictions = [];
+var cumulants = [];
+
+function plot_data(){
+    var ctx = document.getElementById("graph").getContext('2d');
+    ctx.responsive = true;
+    var time_steps = Array.from(Array(predictions.length).keys())
+    console.log(time_steps)
+    var myChart = new Chart(ctx,
+                    {
+                        type: 'line',
+                        data: {
+                            labels:time_steps,
+                            datasets: [{
+                                label: 'prediction',
+                                data: predictions,
+                                borderWidth: 1,
+                                // borderColor: 'rgb(235, 255, 236)',
+                                // pointBackgroundColor: 'rgb(235, 255, 236)',
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: true,
+                                position: 'top',
+                                text: "Predictions"
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: false,
+                                        // fontColor:'rgb(235, 255, 236)',
+                                    },
+                                    gridLines: {
+                                        // color: 'rgb(235, 255, 236, 0.3)',
+                                        display: true,
+                                  },
+                                }],
+                                xAxes: [{
+                                    ticks: {
+                                        // fontColor:'rgb(235, 255, 236)',
+                                    },
+                                    gridLines: {
+                                        // color: 'rgb(235, 255, 236, 0.3)',
+                                        display: true,
+                                  },
+                                }]
+                            },
+                          pointLabels: {
+                            // fontColor: 'white' // labels around the edge like 'Running'
+                          },
+                          animation: {
+                                duration: 0.0
+                            }
+                        }
+                    }
+                    );
+
+}
+
+
 function set_data(result){
     document.getElementById("phi").value = result['phi'];
     document.getElementById("phi_next").value = result['phi_next'];
@@ -14,6 +76,24 @@ function set_data(result){
     document.getElementById("gamma").value = result['gamma'];
     document.getElementById("lambda").value = result['lambda'];
     document.getElementById("step_size").value = result['step_size'];
+
+    var states = ["normalized_position", "normalized_load", "normalized_velocity"];
+    var this_select_content = '';
+    for(var i=0; i < states.length; i++){
+        this_select_content += '<option value="' + states[i] + '">' + states[i] + '</option>';
+        }
+    console.log(this_select_content)
+    $("#cumulant").empty().append(this_select_content);
+
+    document.getElementById("time-step-counter").innerHTML = "Steps: " + result['steps'];
+    document.getElementById("td_error_display").innerHTML = result['td_error'];
+    document.getElementById("prediction_last").innerHTML = result['prediction'];
+
+
+//    predictions.push(data['prediction']);
+    predictions.push(result['prediction']);
+    console.log(result['prediction']);
+    plot_data();
 }
 
 function get_data(){

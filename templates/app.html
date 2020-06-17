@@ -35,16 +35,25 @@
     <data value="null" id="prediction"></data>
     <data value="null" id="weights"></data>
     <data value="null" id="traces"></data>
-    <data value="null" id="step_size"></data>
 
     <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 id="time-step-counter"></h1>
+            </div>
+            <div class="col-lg-g">
+
+                <strong>Estimated Value</strong><p id="prediction_last"></p>
+                <strong>TD error</strong><p id="td_error_display"></p>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-6" id="system_state" style="text-align:center">
                 System visualization here
             </div>
 
-            <div class="col-lg-6" id="graph" style="text-align:center">
-                Prediction visualization here
+            <div class="col-lg-6" style="text-align:center">
+               <canvas id="graph" width="400" height="400"></canvas>
 
             </div>
         </div>
@@ -52,7 +61,7 @@
         <div class="row">
             <b>Question Parameters</b>
             <div class="col-md-12">
-                Cumulant : <input type="text" id="cumulant">
+                Cumulant : <select id="cumulant"></select>
                 <br><br>
             </div>
             <div class="col-md-12">
@@ -70,12 +79,14 @@
                 <br><br>
             </div>
             <div class="col-md-12">
-                Step-size :   <input type="text" id="" name="lname">
+                Step-size :   <input type="text" id="step_size" name="lname">
                 <br><br>
             </div>
         </div>
     </div>
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/chart.min.js')}}"></script>
 <script src="{{url_for('static', filename='js/simulator.js')}}"></script>
 </html>

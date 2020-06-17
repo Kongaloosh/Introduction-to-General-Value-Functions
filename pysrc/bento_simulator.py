@@ -20,11 +20,3 @@ def get_state(steps, normalized_position, normalized_load, normalized_velocity):
 
     return steps, normalized_position, normalized_load, normalized_velocity
 
-    # state_joints = [normalized_position * 50,
-    #                 (normalized_velocity * 100 + 1) / 2 * 10]
-
-    # prompt_msg = 'Step Number: ' + str(number_of_steps) + ' Shoulder Pos: ' + str(
-    #     "%.3f" % np.absolute(round(normalized_position, 3))) + ' Gripper Movement: ' + str(
-    #     is_moving) + ' Gripper Prediction: ' + str("%.5f" % np.nan) + ' Gripper Return: ' + str(
-    #     np.nan)  # print steps elapsed since beginning of experiment
-
