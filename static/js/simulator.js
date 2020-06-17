@@ -15,13 +15,15 @@ function calculate_return(cumulants, gamma){
 }
 
 function plot_data(){
-    var return_cumulant = calculate_return(cumulants, document.getElementById("gamma").value)
+    var gamma = document.getElementById("gamma").value
+    var return_cumulant = calculate_return(cumulants, gamma)
     var ctx = document.getElementById("graph").getContext('2d');
     ctx.responsive = true;
     var time_steps = Array.from(Array(predictions.length).keys())
-    predictions = predictions.slice(-1000);
-    cumulants = cumulants.slice(-1000);
-    return_cumulant = return_cumulant.slice(-1000);
+    predictions = predictions.slice(-100);
+    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
+    cumulants = cumulants.slice(-100);
+    return_cumulant = return_cumulant.slice(-100);
     var myChart = new Chart(ctx,
                     {
                         type: 'line',
@@ -29,7 +31,7 @@ function plot_data(){
                             labels:time_steps,
                             datasets: [{
                                 label: 'prediction',
-                                data: predictions,
+                                data: prediction_plot,
                                 borderWidth: 1,
                                 fill: false,
                                 // borderColor: 'rgb(235, 255, 236)',
@@ -121,7 +123,6 @@ function set_data(result){
     document.getElementById("prediction_last").innerHTML = result['prediction'];
 
 
-//    predictions.push(data['prediction']);
     predictions.push(result['prediction']);
     cumulants.push(result['is_moving']);
     plot_data();
@@ -168,4 +169,4 @@ function update_simulation(val) {
 
 setInterval(function(){
     update_simulation()
-}, 1000);
+}, 100);
