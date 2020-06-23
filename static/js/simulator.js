@@ -194,9 +194,9 @@ function get_data(){
 }
 
 function update_html(){
-    document.getElementById("td_error_display").value = td_error;
-    document.getElementById("prediction_last").value = prediction;
-    document.getElementById("time-step-counter").value = time_steps;
+    document.getElementById("time-step-counter").innerHTML = "Steps: " + steps;
+    document.getElementById("td_error_display").innerHTML = td_error;
+    document.getElementById("prediction_last").innerHTML = prediction;
 }
 
 function update_simulation(){
