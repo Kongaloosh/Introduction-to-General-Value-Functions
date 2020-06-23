@@ -8,7 +8,8 @@ function calculate_return(cumulants, gamma){
         for (var i = return_cumulant.length - 2; i >= 0; i--) {
             return_cumulant[i] = (return_cumulant[i] + return_cumulant[i+1]*gamma)
         }
-        return return_cumulant.map(x => x/(1/(1-gamma)))
+//        return return_cumulant.map(x => x/(1/(1-gamma)))
+        return return_cumulant
     }else{
         return []
     }
@@ -21,7 +22,8 @@ function plot_data(){
     ctx.responsive = true;
     var time_steps = Array.from(Array(predictions.length).keys())
     predictions = predictions.slice(-100);
-    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
+    var prediction_plot = predictions
+//    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
     cumulants = cumulants.slice(-100);
     return_cumulant = return_cumulant.slice(-100);
     var myChart = new Chart(ctx,
@@ -107,9 +109,6 @@ function set_data(result){
     document.getElementById("traces").value = result['traces'];
     document.getElementById("prediction").value = result['prediction'];
     document.getElementById("weights").value = result['weights'];
-    document.getElementById("gamma").value = result['gamma'];
-    document.getElementById("lambda").value = result['lambda'];
-    document.getElementById("step_size").value = result['step_size'];
 
     var states = ["normalized_position", "normalized_load", "normalized_velocity"];
     var this_select_content = '';

@@ -82,7 +82,7 @@ def simulator():
             data['weights'], data["is_moving"], data["gamma"], data["phi_next"], data["phi"]
         )
         # calculate the new eligibility traces
-        data["traces"] = td.replace(data["traces"], data["gamma"], data["lambda"], data["phi"])
+        data["traces"] = td.accumulate(data["traces"], data["gamma"], data["lambda"], data["phi"])
 
         # update the weights to learn from the most recent time-step
         data["weights"] = td.update_weights(data["td_error"],data["traces"],data["weights"],data["step_size"])
