@@ -193,6 +193,12 @@ function get_data(){
     step_size = document.getElementById("step_size").value;
 }
 
+function update_html(){
+    document.getElementById("td_error_display").value = td_error;
+    document.getElementById("prediction_last").value = prediction;
+    document.getElementById("time-step-counter").value = time_steps;
+}
+
 function update_simulation(){
     get_data();
     update_state();
@@ -200,6 +206,7 @@ function update_simulation(){
     predictions.push(prediction);
     cumulants.push(cumulant);
     plot_data();
+    update_html();
 }
 
 //function update_simulation(val) {
