@@ -21,9 +21,85 @@ var hand_moving = 0;
 var cumulant = 0;
 var current_vel = 0;
 
+var subindices = [];
+
+for (j = 0; j<= 1; j++){
+    for (i = 0; i < 50; i++) {
+      subindices.push(i*10+j)
+    }
+}
+
+
 document.getElementById("lambda").value = lambda;
 document.getElementById("gamma").value = gamma;
 document.getElementById("step_size").value = step_size;
+
+var options = {
+        series: [
+            {
+            name: 'Weights',
+            data: subindices.map(i => weights[i]),
+            },
+            {
+            name: 'Traces',
+            data: subindices.map(i => traces[i]),
+            },
+        ],
+        chart: {
+          height: 350,
+          type: 'heatmap',
+          animations: {
+            enabled: false,
+            },
+        },
+        dataLabels: {
+          enabled: false
+            },
+//        colors: ["#008FFB"],
+        title: {
+            text: 'HeatMap Chart (Single color)'
+            },
+         plotOptions: {
+            heatmap: {
+            distributed: true
+            }
+          }
+//         plotOptions: {
+//            heatmap: {
+//              shadeIntensity: 0.5,
+//              colorScale: {
+//                ranges: [
+//                  {
+//                    from: 0,
+//                    to: 0.005,
+//                    name: "low",
+//                    color: "#00A100"
+//                  },
+//                  {
+//                    from: 0.005,
+//                    to: 0.05,
+//                    name: "medium",
+//                    color: "#128FD9"
+//                  },
+//                  {
+//                    from: 0.05,
+//                    to: 0.5,
+//                    name: "high",
+//                    color: "#FFB200"
+//                  },
+//                  {
+//                    from: 0.5,
+//                    to: 1,
+//                    name: "extreme",
+//                    color: "#FF0000"
+//                  }
+//                ]
+//              }
+//            }
+//          },
+    };
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
 
 function calculate_return(cumulants, gamma){
     var return_cumulant = cumulants.slice();
@@ -187,6 +263,23 @@ function plot_data(){
 
 }
 
+
+function weight_chart(){
+//    chart.updateSeries(weights)
+    chart.updateSeries(
+        [
+            {
+            name: 'Weights',
+            data: subindices.map(i => weights[i]),
+            },
+            {
+            name: 'Traces',
+            data: subindices.map(i => traces[i]),
+            },
+        ]
+        )
+}
+
 function get_data(){
     lambda = document.getElementById("lambda").value;
     gamma = document.getElementById("gamma").value
@@ -207,6 +300,7 @@ function update_simulation(){
     cumulants.push(cumulant);
     plot_data();
     update_html();
+    weight_chart();
 }
 
 //function update_simulation(val) {
