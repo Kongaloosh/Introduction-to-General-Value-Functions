@@ -2,6 +2,29 @@ var td_errs = [];
 var predictions = [];
 var cumulants = [];
 
+var td_error = 0;
+var steps = 0;
+var memory = 502;
+var weights = new Array(memory).fill(0);
+var traces = new Array(memory).fill(0);
+var phi = new Array(memory).fill(0);
+var phi_next = new Array(memory).fill(0);
+var gamma = 0.9;
+var lambda = 0.9;
+var step_size = 0.4;
+var prediction = 0;
+
+var position = 0;
+var load = 0;
+var velocity = 1;
+var hand_moving = 0;
+var cumulant = 0;
+var current_vel = 0;
+
+document.getElementById("lambda").value = lambda;
+document.getElementById("gamma").value = gamma;
+document.getElementById("step_size").value = step_size;
+
 function calculate_return(cumulants, gamma){
     var return_cumulant = cumulants.slice();
     if (return_cumulant.length > 2){
@@ -13,6 +36,75 @@ function calculate_return(cumulants, gamma){
     }else{
         return []
     }
+}
+
+function accumulate(){
+    for(var i=0; i< traces.length; i++) {
+        traces[i] = traces[i] * gamma * lambda + phi[i]
+    }
+}
+
+function calculate_td_error(){
+    var v_state = 0;
+    var v_state_prime = 0;
+    for(var i=0; i< weights.length; i++) {
+        v_state += weights[i] * phi[i];
+        v_state_prime += weights[i] * phi_next[i];
+    }
+    return cumulant + gamma * v_state_prime - v_state;
+}
+
+function update_weights(){
+    for(var i=0; i< weights.length; i++) {
+        weights[i] += step_size * traces[i] * td_error;
+    }
+}
+
+function make_prediction(){
+    var v = 0;
+    for(var i=0; i< weights.length; i++) {
+        v += weights[i] * phi[i];
+    }
+    prediction = v
+}
+
+
+function td_step(){
+    steps += 1;
+    td_error = calculate_td_error();
+    accumulate();
+    update_weights();
+    make_prediction()
+}
+
+function log_nonzero(arr){
+    var count = 0;
+    for(var i=0; i< traces.length; i++) {
+            if (arr[i] == 1){
+                return i
+            }
+    }
+}
+
+function update_state(){
+    phi = phi_next
+    if (position >= 50){
+        current_vel = -1 * velocity;
+    }else if (position <= 0){
+        current_vel = velocity;
+    }
+
+    position += current_vel;
+
+    if (position >= 35){
+        hand_moving = 1;
+    }else{
+        hand_moving = 0;
+    }
+
+    cumulant = hand_moving
+    phi_next = new Array(memory).fill(0);
+    phi_next[parseInt(position*10+(Math.min(current_vel+1, 1)))] = 1;
 }
 
 function plot_data(){
@@ -95,81 +187,39 @@ function plot_data(){
 
 }
 
+function get_data(){
+    lambda = document.getElementById("lambda").value;
+    gamma = document.getElementById("gamma").value
+    step_size = document.getElementById("step_size").value;
+}
 
-function set_data(result){
-    if result['setup']{
-         document.getElementById("gamma").value = result['gamma'];
-         document.getElementById("lambda").value = result['lambda'];
-         document.getElementById("step_size").value = result['step_size'];
-    }
-    document.getElementById("phi").value = result['phi'];
-    document.getElementById("phi_next").value = result['phi_next'];
-    document.getElementById("tilings").value = result['tilings'];
-    document.getElementById("memory").value = result['memory'];
-    document.getElementById("steps").value = result['steps'];
-    document.getElementById("normalized_position").value = result['normalized_position'];
-    document.getElementById("normalized_load").value = result['normalized_load'];
-    document.getElementById("normalized_velocity").value = result['normalized_velocity'];
-    document.getElementById("td_error").value = result['td_error'];
-    document.getElementById("traces").value = result['traces'];
-    document.getElementById("prediction").value = result['prediction'];
-    document.getElementById("weights").value = result['weights'];
-
-    var states = ["normalized_position", "normalized_load", "normalized_velocity"];
-    var this_select_content = '';
-    for(var i=0; i < states.length; i++){
-        this_select_content += '<option value="' + states[i] + '">' + states[i] + '</option>';
-        }
-    $("#cumulant").empty().append(this_select_content);
-
-    document.getElementById("time-step-counter").innerHTML = "Steps: " + result['steps'];
-    document.getElementById("td_error_display").innerHTML = result['td_error'];
-    document.getElementById("prediction_last").innerHTML = result['prediction'];
-
-
-    predictions.push(result['prediction']);
-    cumulants.push(result['is_moving']);
+function update_simulation(){
+    get_data();
+    update_state();
+    td_step();
+    predictions.push(prediction);
+    cumulants.push(cumulant);
     plot_data();
 }
 
-function get_data(){
-    return {
-       "phi": document.getElementById("phi").value,
-       "phi_next": document.getElementById("phi_next").value,
-       "tilings": document.getElementById("tilings").value,
-       "memory": document.getElementById("memory").value,
-       "steps": document.getElementById("steps").value,
-       "normalized_position": document.getElementById("normalized_position").value,
-       "normalized_load": document.getElementById("normalized_load").value,
-       "normalized_velocity": document.getElementById("normalized_velocity").value,
-       "td_error": document.getElementById("td_error").value,
-       "traces": document.getElementById("traces").value,
-       "prediction": document.getElementById("prediction").value,
-       "weights": document.getElementById("weights").value,
-       "gamma": document.getElementById("gamma").value,
-       "lambda": document.getElementById("lambda").value,
-       "step_size": document.getElementById("step_size").value
-    }
-}
-
-function update_simulation(val) {
-    fetch('/simulator', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                "content-type": "application/json"
-            },
-            body: JSON.stringify(get_data())
-        }).then(function (response) {
-                return response.json();
-            })
-            .then(function (result) {
-                set_data(result)
-            })
-        .catch(function(error) {
-        // if the server does something funky, we catch it here and keep on truckin'
-    });
-}
+//function update_simulation(val) {
+//    fetch('/simulator', {
+//            method: 'POST',
+//            headers: {
+//                'Accept': 'application/json',
+//                "content-type": "application/json"
+//            },
+//            body: JSON.stringify(get_data())
+//        }).then(function (response) {
+//                return response.json();
+//            })
+//            .then(function (result) {
+//                set_data(result)
+//            })
+//        .catch(function(error) {
+//        // if the server does something funky, we catch it here and keep on truckin'
+//    });
+//}
 
 setInterval(function(){
     update_simulation()
