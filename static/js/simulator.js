@@ -13,6 +13,10 @@ var gamma = 0.9;
 var lambda = 0.9;
 var step_size = 0.4;
 var prediction = 0;
+var v_state = 0;
+var v_state_prime = 0;
+var active_state = 0;
+var active_state_next = 0;
 
 var position = 0;
 var load = 0;
@@ -20,6 +24,7 @@ var velocity = 1;
 var hand_moving = 0;
 var cumulant = 0;
 var current_vel = 0;
+
 
 var subindices = [];
 
@@ -57,7 +62,7 @@ var options = {
             },
 //        colors: ["#008FFB"],
         title: {
-            text: 'HeatMap Chart (Single color)'
+            text: 'Weight Vector and Eligibility Traces'
             },
          plotOptions: {
             heatmap: {
@@ -121,8 +126,8 @@ function accumulate(){
 }
 
 function calculate_td_error(){
-    var v_state = 0;
-    var v_state_prime = 0;
+    v_state = 0;
+    v_state_prime = 0;
     for(var i=0; i< weights.length; i++) {
         v_state += weights[i] * phi[i];
         v_state_prime += weights[i] * phi_next[i];
@@ -163,7 +168,8 @@ function log_nonzero(arr){
 }
 
 function update_state(){
-    phi = phi_next
+    phi = phi_next;
+    active_state = active_state_next;
     if (position >= 50){
         current_vel = -1 * velocity;
     }else if (position <= 0){
@@ -178,9 +184,10 @@ function update_state(){
         hand_moving = 0;
     }
 
-    cumulant = hand_moving
+    cumulant = hand_moving;
     phi_next = new Array(memory).fill(0);
-    phi_next[parseInt(position*10+(Math.min(current_vel+1, 1)))] = 1;
+    active_state_next = parseInt(position*10+(Math.min(current_vel+1, 1)))
+    phi_next[active_state_next] = 1;
 }
 
 function plot_data(){
@@ -286,10 +293,28 @@ function get_data(){
     step_size = document.getElementById("step_size").value;
 }
 
+function precise(x) {
+  return Number.parseFloat(x).toPrecision(2);
+}
+
 function update_html(){
     document.getElementById("time-step-counter").innerHTML = "Steps: " + steps;
-    document.getElementById("td_error_display").innerHTML = td_error;
-    document.getElementById("prediction_last").innerHTML = prediction;
+    document.getElementById("td-td").innerHTML = precise(td_error);
+    document.getElementById("td-cumulant").innerHTML = precise(cumulant);
+    document.getElementById("td-gamma").innerHTML = precise(gamma);
+    document.getElementById("td-v-next").innerHTML = precise(v_state_prime);
+    document.getElementById("td-v").innerHTML = precise(v_state);
+
+    document.getElementById("e-e").innerHTML = precise(traces[active_state])
+    document.getElementById("e-gamma").innerHTML = precise(gamma)
+    document.getElementById("e-lambda").innerHTML = precise(lambda)
+    document.getElementById("e-e2").innerHTML = precise(traces[active_state])
+
+    document.getElementById("w-w").innerHTML = precise(weights[active_state])
+    document.getElementById("w-w2").innerHTML = precise(weights[active_state])
+    document.getElementById("w-alpha").innerHTML = precise(step_size)
+    document.getElementById("w-td").innerHTML = precise(td_error)
+
 }
 
 function update_simulation(){

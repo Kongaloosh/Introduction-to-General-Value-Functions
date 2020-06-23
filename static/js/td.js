@@ -8,8 +8,8 @@ function accumulate(traces, gamma, lmbda, phi){
 }
 
 function calculate_td_error(weights, cumulant, gamma_next, phi_next, phi){
-    var v_state = 0;
-    var v_state_prime = 0;
+    v_state = 0;
+    v_state_prime = 0;
     for(var i=0; i< weights.length; i++) {
         v_state += weights[i] + phi[i];
         v_state_prime += weights[i] + phi_next[i];
