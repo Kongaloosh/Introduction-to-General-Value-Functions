@@ -97,6 +97,11 @@ function plot_data(){
 
 
 function set_data(result){
+    if result['setup']{
+         document.getElementById("gamma").value = result['gamma'];
+         document.getElementById("lambda").value = result['lambda'];
+         document.getElementById("step_size").value = result['step_size'];
+    }
     document.getElementById("phi").value = result['phi'];
     document.getElementById("phi_next").value = result['phi_next'];
     document.getElementById("tilings").value = result['tilings'];

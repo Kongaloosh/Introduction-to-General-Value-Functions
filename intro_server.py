@@ -25,6 +25,7 @@ def simulator():
         if data == None or data['steps'] == 'null':
             mem = 10012
             return jsonify({
+                "setup": True,
                 "steps": 0,
                 "normalized_position": 0,
                 "normalized_load": 0,
