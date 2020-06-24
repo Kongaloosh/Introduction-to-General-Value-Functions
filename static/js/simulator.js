@@ -317,6 +317,11 @@ function update_html(){
     document.getElementById("w-alpha").innerHTML = precise(step_size)
     document.getElementById("w-td").innerHTML = precise(td_error)
 
+    document.getElementById("shoulder-pos").innerHTML = "Shoulder position: " + position;
+    document.getElementById("shoulder-vel").innerHTML = "Shoulder velocity: " + velocity;
+    document.getElementById("hand-move").innerHTML = "Is Hand Moving: " + hand_moving;
+
+
 }
 
 function update_simulation(){
