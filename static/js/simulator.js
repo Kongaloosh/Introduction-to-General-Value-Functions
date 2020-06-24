@@ -24,6 +24,7 @@ var velocity = 1;
 var hand_moving = 0;
 var cumulant = 0;
 var current_vel = 0;
+var w_last = 0;
 
 
 var subindices = [];
@@ -136,6 +137,7 @@ function calculate_td_error(){
 }
 
 function update_weights(){
+    w_last = weights[active_state]
     for(var i=0; i< weights.length; i++) {
         weights[i] += step_size * traces[i] * td_error;
     }
@@ -310,7 +312,7 @@ function update_html(){
     document.getElementById("e-lambda").innerHTML = precise(lambda)
     document.getElementById("e-e2").innerHTML = precise(traces[active_state])
 
-    document.getElementById("w-w").innerHTML = precise(weights[active_state])
+    document.getElementById("w-w").innerHTML = precise(w_last)
     document.getElementById("w-w2").innerHTML = precise(weights[active_state])
     document.getElementById("w-alpha").innerHTML = precise(step_size)
     document.getElementById("w-td").innerHTML = precise(td_error)
