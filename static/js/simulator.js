@@ -2,6 +2,8 @@ var td_errs = [];
 var predictions = [];
 var cumulants = [];
 
+var learning_paused = false;
+
 var td_error = 0;
 var steps = 0;
 var memory = 502;
@@ -114,7 +116,7 @@ function calculate_return(cumulants, gamma){
         for (var i = return_cumulant.length - 2; i >= 0; i--) {
             return_cumulant[i] = (return_cumulant[i] + return_cumulant[i+1]*gamma)
         }
-//        return return_cumulant.map(x => x/(1/(1-gamma)))
+        return return_cumulant.map(x => x/(1/(1-gamma)))
         return return_cumulant
     }else{
         return []
@@ -201,7 +203,7 @@ function plot_data(){
     var time_steps = Array.from(Array(predictions.length).keys())
     predictions = predictions.slice(-100);
     var prediction_plot = predictions
-//    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
+    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
     cumulants = cumulants.slice(-100);
     return_cumulant = return_cumulant.slice(-100);
     var myChart = new Chart(ctx,
@@ -328,14 +330,16 @@ function update_html(){
 }
 
 function update_simulation(){
-    get_data();
-    update_state();
-    td_step();
-    predictions.push(prediction);
-    cumulants.push(cumulant);
-    plot_data();
-    update_html();
-    weight_chart();
+    if (!learning_paused){
+        get_data();
+        update_state();
+        td_step();
+        predictions.push(prediction);
+        cumulants.push(cumulant);
+        plot_data();
+        update_html();
+        weight_chart();
+    }
 }
 
 //function update_simulation(val) {
@@ -360,3 +364,11 @@ function update_simulation(){
 setInterval(function(){
     update_simulation()
 }, 100);
+
+button.addEventListener("play-pause", function(){
+    learning_paused != learning_paused
+});
+
+button.addEventListener("reset", function(){
+  weights = new Array(memory).fill(0);
+});

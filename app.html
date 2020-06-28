@@ -73,7 +73,7 @@
     </div>
     <hr>
     <div class="row">
-        <div class="col-lg-6" style="text-align: center">
+        <div class="col-lg-3" style="text-align: center">
             <b>Question Parameters</b>
             <div class="col-lg-12">
                 Cumulant : <select id="cumulant"></select>
@@ -83,12 +83,8 @@
                 Gamma : <input type="number" id="gamma" , value="null">
                 <br>
             </div>
-            <div class="col-lg-12">
-                Policy : <input type="text" id="policy">
-                <br>
-            </div>
         </div>
-        <div class="col-lg-6" style="text-align: center">
+        <div class="col-lg-3" style="text-align: center">
             <b>Answer Parameters</b>
             <div class="col-lg-12">
                 Lambda : <input type="number" id="lambda" value="null">
@@ -99,12 +95,15 @@
                 <br>
             </div>
         </div>
+        <div class="col-lg-3">
+            <button id="play-pause">⏯︎</button>
+            <button id="reset">🔄</button>
+        </div>
     </div>
 </div>
-
-</body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/static/js/chart.min.js"></script>
 <script src="/static/js/apexcharts.min.js"></script>
 <script src="/static/js/simulator.js"></script>
+</body>
 </html>
