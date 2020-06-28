@@ -366,7 +366,7 @@ setInterval(function(){
 }, 100);
 
 document.getElementById("play-pause").addEventListener("click", function(){
-    learning_paused != learning_paused
+    learning_paused = !learning_paused
 });
 
 document.getElementById("reset").addEventListener("click", function(){
