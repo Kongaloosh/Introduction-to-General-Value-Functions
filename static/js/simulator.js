@@ -331,19 +331,19 @@ function update_html(){
 }
 
 function update_simulation(num_steps){
-    while (num_steps >=0){
-        if (!learning_paused){
-        get_data();
-        update_state();
-        td_step();
-        predictions.push(prediction);
-        cumulants.push(cumulant);
-        plot_data();
-        update_html();
-        weight_chart();
+    if (!learning_paused){
+        while (num_steps > 0){
+            get_data();
+            update_state();
+            td_step();
+            predictions.push(prediction);
+            cumulants.push(cumulant);
+            plot_data();
+            update_html();
+            weight_chart();
+            num_steps--;
         }
     }
-  }
 }
 
 //function update_simulation(val) {
@@ -378,14 +378,21 @@ document.getElementById("reset").addEventListener("click", function(){
   steps = 0;
 });
 
-document.getElementById("ff").addEventListener("click", function()){
+document.getElementById("ff").addEventListener("click", function(){
   speed += 1;
   speed = Math.max(1, speed % 5)
-}
+});
 
-document.getElementByID("step").addEventListener("click", function()){
+document.getElementById("step").addEventListener("click", function(){
     if (learning_paused){
-       update_simulation(1)
+            get_data();
+            update_state();
+            td_step();
+            predictions.push(prediction);
+            cumulants.push(cumulant);
+            plot_data();
+            update_html();
+            weight_chart();
     }
-}
+});
 
