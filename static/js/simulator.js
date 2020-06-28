@@ -25,6 +25,7 @@ var position = 0;
 var load = 0;
 var velocity = 1;
 var hand_moving = 0;
+var cumulant_idx = 0;
 var cumulant = 0;
 var current_vel = 0;
 var w_last = 0;
@@ -42,6 +43,13 @@ for (j = 0; j<= 1; j++){
 document.getElementById("lambda").value = lambda;
 document.getElementById("gamma").value = gamma;
 document.getElementById("step_size").value = step_size;
+
+var states = ["is moving", "position", "load", "velocity"];
+    var this_select_content = '';
+    for(var i=0; i < states.length; i++){
+        this_select_content += '<option value="' + states[i] + '">' + states[i] + '</option>';
+        }
+    $("#cumulant").empty().append(this_select_content);
 
 var options = {
         series: [
@@ -190,7 +198,7 @@ function update_state(){
         hand_moving = 0;
     }
 
-    cumulant = hand_moving;
+    cumulant = [hand_moving, position, load, current_vel][cumulant_idx];
     phi_next = new Array(memory).fill(0);
     active_state_next = parseInt(parseInt(position)*10+(Math.min(current_vel+1, 1)))
     phi_next[active_state_next] = 1;
@@ -346,24 +354,6 @@ function update_simulation(num_steps){
     }
 }
 
-//function update_simulation(val) {
-//    fetch('/simulator', {
-//            method: 'POST',
-//            headers: {
-//                'Accept': 'application/json',
-//                "content-type": "application/json"
-//            },
-//            body: JSON.stringify(get_data())
-//        }).then(function (response) {
-//                return response.json();
-//            })
-//            .then(function (result) {
-//                set_data(result)
-//            })
-//        .catch(function(error) {
-//        // if the server does something funky, we catch it here and keep on truckin'
-//    });
-//}
 
 setInterval(function(){
     update_simulation(speed)
@@ -396,3 +386,7 @@ document.getElementById("step").addEventListener("click", function(){
     }
 });
 
+document.getElementById("cumulant").addEventListener("change", function() {
+    cumulant_idx = document.getElementById("cumulant").selectedIndex;
+    cumulants = [];
+});
