@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">-->
+    <!-- Custom CSS -->
+
+    <!-- Custom Fonts -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6" id="system_state" style="text-align:center">
+            <div class="row">
+                <div class="col-lg-4">
+                    <p id="shoulder-pos" >Shoulder position: </p> <br>
+                    <p id="shoulder-vel">Shoulder velocity:</p> <br>
+                    <p id="hand-move">Hand moving: </p> <br>
+                </div>
+                <div class="col-lg-8">
+                    System visualization here
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6" style="text-align:center">
+            <canvas id="graph" width="400" height="300"></canvas>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 id="time-step-counter"></h1>
+                </div>
+                <div class="col-lg-4">
+                    <h3 id="active_state"></h3>
+                </div>
+                <div class="col-lg-12">
+                    <strong> &delta; &larr; c + &gamma; v(s') - v(s)</strong> <br>
+                    <p style="display:inline" id="td-td">0</p> &larr; <p style="display:inline" id="td-cumulant">0</p> + <p style="display:inline" id="td-gamma">0</p> * <p style="display:inline" id="td-v-next">0</p> - <p style="display:inline" id="td-v">0</p>
+                    <hr>
+                    <strong>e &larr; &gamma; &lambda; e + s </strong> <br>
+                    <p style="display:inline" id="e-e">0</p> &larr; <p style="display:inline" id="e-gamma">0</p> * <p style="display:inline" id="e-lambda">0</p> * <p style="display:inline" id="e-e2">0</p> + <p style="display:inline" id="e-phi">0</p>
+                    <hr>
+                    <strong>w &larr; &alpha; &delta; w </strong> <br>
+                    <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> + <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div id="chart">
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6" style="text-align: center">
+            <b>Question Parameters</b>
+            <div class="col-lg-12">
+                Cumulant : <select id="cumulant"></select>
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Gamma : <input type="number" id="gamma" , value="null">
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Policy : <input type="text" id="policy">
+                <br>
+            </div>
+        </div>
+        <div class="col-lg-6" style="text-align: center">
+            <b>Answer Parameters</b>
+            <div class="col-lg-12">
+                Lambda : <input type="number" id="lambda" value="null">
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Step-size : <input type="text" id="step_size" name="lname">
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/apexcharts.min.js"></script>
+<script src="/static/js/simulator.js"></script>
+</html>
