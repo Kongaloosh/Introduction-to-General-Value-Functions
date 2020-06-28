@@ -365,10 +365,10 @@ setInterval(function(){
     update_simulation()
 }, 100);
 
-button.addEventListener("play-pause", function(){
+document.getElementById("play-pause").addEventListener("click", function(){
     learning_paused != learning_paused
 });
 
-button.addEventListener("reset", function(){
+document.getElementById("reset").addEventListener("click", function(){
   weights = new Array(memory).fill(0);
 });
