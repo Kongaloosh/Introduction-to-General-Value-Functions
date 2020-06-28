@@ -31,67 +31,74 @@
     <div class="row">
         <div class="col-lg-6" id="system_state" style="text-align:center">
             <div class="row">
-                <p id="shoulder-pos" >Shoulder position: </p> <br>
-                <p id="shoulder-vel">Shoulder velocity:</p> <br>
-                <p id="hand-move">Hand moving: </p> <br>
+                <div class="col-lg-4">
+                    <p id="shoulder-pos" >Shoulder position: </p> <br>
+                    <p id="shoulder-vel">Shoulder velocity:</p> <br>
+                    <p id="hand-move">Hand moving: </p> <br>
+                </div>
+                <div class="col-lg-8">
+                    System visualization here
+                </div>
             </div>
-            System visualization here
         </div>
 
         <div class="col-lg-6" style="text-align:center">
-            <canvas id="graph" width="400" height="400"></canvas>
+            <canvas id="graph" width="400" height="300"></canvas>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-6">
-            <row>
-                <h1 id="time-step-counter"></h1>
-                <strong> &delta; &larr; c + &gamma; v(s') - v(s)</strong> <br>
-                <p style="display:inline" id="td-td">0</p> &larr; <p style="display:inline" id="td-cumulant">0</p> + <p style="display:inline" id="td-gamma">0</p> * <p style="display:inline" id="td-v-next">0</p> - <p style="display:inline" id="td-v">0</p>
-                <hr>
-                <strong>e &larr; &gamma; &lambda; e + s </strong> <br>
-                <p style="display:inline" id="e-e">0</p> &larr; <p style="display:inline" id="e-gamma">0</p> * <p style="display:inline" id="e-lambda">0</p> * <p style="display:inline" id="e-e2">0</p> + <p style="display:inline" id="e-phi">0</p>
-                <hr>
-                <strong>w &larr; &alpha; &delta; w </strong> <br>
-                <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> + <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
-            </row>
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 id="time-step-counter"></h1>
+                </div>
+                <div class="col-lg-4">
+                    <h3 id="active_state"></h3>
+                </div>
+                <div class="col-lg-12">
+                    <strong> &delta; &larr; c + &gamma; v(s') - v(s)</strong> <br>
+                    <p style="display:inline" id="td-td">0</p> &larr; <p style="display:inline" id="td-cumulant">0</p> + <p style="display:inline" id="td-gamma">0</p> * <p style="display:inline" id="td-v-next">0</p> - <p style="display:inline" id="td-v">0</p>
+                    <hr>
+                    <strong>e &larr; &gamma; &lambda; e + s </strong> <br>
+                    <p style="display:inline" id="e-e">0</p> &larr; <p style="display:inline" id="e-gamma">0</p> * <p style="display:inline" id="e-lambda">0</p> * <p style="display:inline" id="e-e2">0</p> + <p style="display:inline" id="e-phi">0</p>
+                    <hr>
+                    <strong>w &larr; &alpha; &delta; w </strong> <br>
+                    <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> + <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div id="chart">
             </div>
         </div>
     </div>
-
+    <hr>
     <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-6">
-                    <b>Question Parameters</b>
-                    <div class="col-md-12">
-                        Cumulant : <select id="cumulant"></select>
-                        <br><br>
-                    </div>
-                    <div class="col-md-12">
-                        Gamma : <input type="number" id="gamma" , value="null">
-                        <br><br>
-                    </div>
-                    <div class="col-md-12">
-                        Policy : <input type="text" id="policy">
-                        <br><br>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <b>Answer Parameters</b>
-                    <div class="col-md-12">
-                        Lambda : <input type="number" id="lambda" value="null">
-                        <br><br>
-                    </div>
-                    <div class="col-md-12">
-                        Step-size : <input type="text" id="step_size" name="lname">
-                        <br><br>
-                    </div>
-                </div>
+        <div class="col-lg-6" style="text-align: center">
+            <b>Question Parameters</b>
+            <div class="col-lg-12">
+                Cumulant : <select id="cumulant"></select>
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Gamma : <input type="number" id="gamma" , value="null">
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Policy : <input type="text" id="policy">
+                <br>
+            </div>
+        </div>
+        <div class="col-lg-6" style="text-align: center">
+            <b>Answer Parameters</b>
+            <div class="col-lg-12">
+                Lambda : <input type="number" id="lambda" value="null">
+                <br>
+            </div>
+            <div class="col-lg-12">
+                Step-size : <input type="text" id="step_size" name="lname">
+                <br>
             </div>
         </div>
     </div>

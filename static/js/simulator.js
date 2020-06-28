@@ -54,6 +54,7 @@ var options = {
         chart: {
           height: 350,
           type: 'heatmap',
+          height: '200',
           animations: {
             enabled: false,
             },
@@ -188,7 +189,7 @@ function update_state(){
 
     cumulant = hand_moving;
     phi_next = new Array(memory).fill(0);
-    active_state_next = parseInt(position*10+(Math.min(current_vel+1, 1)))
+    active_state_next = parseInt(parseInt(position)*10+(Math.min(current_vel+1, 1)))
     phi_next[active_state_next] = 1;
 }
 
@@ -301,6 +302,8 @@ function precise(x) {
 
 function update_html(){
     document.getElementById("time-step-counter").innerHTML = "Steps: " + steps;
+    document.getElementById("active_state").innerHTML = active_state
+
     document.getElementById("td-td").innerHTML = precise(td_error);
     document.getElementById("td-cumulant").innerHTML = precise(cumulant);
     document.getElementById("td-gamma").innerHTML = precise(gamma);
@@ -318,7 +321,7 @@ function update_html(){
     document.getElementById("w-td").innerHTML = precise(td_error)
 
     document.getElementById("shoulder-pos").innerHTML = "Shoulder position: " + position;
-    document.getElementById("shoulder-vel").innerHTML = "Shoulder velocity: " + velocity;
+    document.getElementById("shoulder-vel").innerHTML = "Shoulder velocity: " + current_vel;
     document.getElementById("hand-move").innerHTML = "Is Hand Moving: " + hand_moving;
 
 
