@@ -75,9 +75,9 @@ var options = {
           enabled: false
             },
 //        colors: ["#008FFB"],
-        title: {
-            text: 'Weight Vector and Eligibility Traces'
-            },
+//        title: {
+//            text: 'Weight Vector and Eligibility Traces'
+//            },
          plotOptions: {
             heatmap: {
             distributed: true
@@ -238,7 +238,7 @@ function plot_data(){
                         },
                         options: {
                             title: {
-                                display: true,
+                                display: false,
                                 position: 'top',
                                 text: "Predictions"
                             },

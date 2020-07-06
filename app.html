@@ -34,7 +34,7 @@
     <![endif]-->
   <!--<title>Bootstrap Example</title>-->
   <!--<meta charset="utf-8">-->
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -59,6 +59,13 @@
         </div>
 
         <div class="col-lg-6 h-100" style="text-align:center">
+            <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="bottom"
+                            title="The Temporal difference error"
+                            data-content="The difference between the estimated value from the next state"
+                    >Learned Prediction vs Signal</a>
             <canvas id="graph" width="300" height="200"></canvas>
         </div>
     </div>
@@ -85,26 +92,105 @@
                             data-toggle="popover"
                             data-placement="top"
                             title="Cumulant (a.k.a Pseudo-reward)"
-                            data-content="The signal of interest we accumulate.">c</a> + &gamma; v(s') - v(s) <br>
+                            data-content="The signal of interest we accumulate.">c</a> + <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="The discounting function"
+                            data-content="The signal of interest we accumulate.">&gamma;</a>
+                            <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="The value of the next state"
+                            data-content="The signal of interest we accumulate.">v(s')</a>
+                            - <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="The value of the current state"
+                            data-content="The signal of interest we accumulate.">v(s)</a> <br>
+                   <!--Placeholders for the update values-->
                     <p style="display:inline" id="td-td">0</p> &larr; <p style="display:inline" id="td-cumulant">0</p> + <p style="display:inline" id="td-gamma">0</p> * <p style="display:inline" id="td-v-next">0</p> - <p style="display:inline" id="td-v">0</p>
                     <hr>
-                    <strong>e &larr; &gamma; &lambda; e + s </strong> <br>
+                    <strong>
+                        <!--Elegibility trace description-->
+                        <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Elegibility Traces"
+                            data-content="The signal of interest we accumulate.">e</a> &larr; <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">&gamma;</a>
+                            <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">&lambda;</a> <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">e</a> + <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">s</a> </strong> <br>
                     <p style="display:inline" id="e-e">0</p> &larr; <p style="display:inline" id="e-gamma">0</p> * <p style="display:inline" id="e-lambda">0</p> * <p style="display:inline" id="e-e2">0</p> + <p style="display:inline" id="e-phi">0</p>
                     <hr>
-                    <strong>w &larr; &alpha; &delta; w </strong> <br>
+                    <strong>
+                        <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">w</a> &larr; <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">&alpha;</a> <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">&delta;</a> <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">w</a> </strong> <br>
                     <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> + <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
                 </div>
             </div>
         </div>
         <div class="col-lg-6">
+            <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate."><strong>Weight Vector & Elegibilty Traces</strong></a>
             <div id="chart">
             </div>
         </div>
     </div>
     <hr>
-    <div class="row h-auto">
-        <div class="col-lg-3" style="text-align: center">
-            <b>Question Parameters</b>
+    <div class="row h-auto flex">
+        <div class="col-lg-4" style="text-align: center; vertical-align: middle">
+             <a
+                href="#"
+                data-toggle="popover"
+                data-placement="top"
+                title="The Temporal difference error"
+                data-content="The difference between the estimated value from the next state"
+             ><b>Question Parameters</b></a>
             <div class="col-lg-12">
                 c : <select id="cumulant"></select>
                 <br>
@@ -114,8 +200,16 @@
                 <br>
             </div>
         </div>
-        <div class="col-lg-3" style="text-align: center">
-            <b>Answer Parameters</b>
+        <div class="col-lg-4" style="text-align: center; vertical-align: middle">
+             <a
+                href="#"
+                data-toggle="popover"
+                data-placement="top"
+                title="The Temporal difference error"
+                data-content="The difference between the estimated value from the next state"
+                    >
+                 <b>Answer Parameters</b>
+             </a>
             <div class="col-lg-12">
                 &lambda; : <input type="number" id="lambda" value="null">
                 <br>
@@ -125,7 +219,7 @@
                 <br>
             </div>
         </div>
-        <div class="col-lg-6 text-center">
+        <div class="col-lg-4 text-center" style="text-align: center; vertical-align: middle">
             <button id="play-pause">⏯︎</button>
             <button id="step">⏭︎</button>
             <button id="ff">⏩︎</button>
@@ -133,8 +227,8 @@
         </div>
     </div>
 </div>
-<div class="col-lg-5 h-100" style="">
-    <div class="" style="overflow-y:scroll;max-height: 100vh">
+<div class="col-lg-5 h-100" style="padding: 10px 10px 0px 10px;box-shadow: inset 7px 0 9px -7px rgba(0,0,0,0.4);overflow-y:scroll;max-height: 100vh;">
+    <div class="">
 
         <p>
         Before we come to understand how predictions are made, we first must have an understanding of how we could describe
@@ -252,7 +346,6 @@ c =
 
     $(document).ready(function() {
        $('[data-toggle="popover"]').popover({
-          placement: 'top',
           trigger: 'hover'
        });
     });
