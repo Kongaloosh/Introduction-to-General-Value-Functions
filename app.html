@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>General Value Friends</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!--<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">-->
-    <!-- Custom CSS -->
 
-    <!-- Custom Fonts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.0.5/es5/startup.js"></script>
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+    });
+    </script>
+
+    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+     <!--Custom CSS-->
+
+     <!--Custom Fonts-->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"
           type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
@@ -16,17 +25,26 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
           rel='stylesheet' type='text/css'>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+     <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
+     <!--WARNING: Respond.js doesn't work if you view the page via file://-->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+  <!--<title>Bootstrap Example</title>-->
+  <!--<meta charset="utf-8">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 </head>
 <body>
-<div class="container">
-    <div class="row">
+<div class="container" style="min-width: 100%">
+<div class="row h-100">
+    <div class="col-lg-7">
+        <div class="row h-auto">
         <div class="col-lg-6" id="system_state" style="text-align:center">
             <div class="row">
                 <div class="col-lg-4">
@@ -40,22 +58,34 @@
             </div>
         </div>
 
-        <div class="col-lg-6" style="text-align:center">
-            <canvas id="graph" width="400" height="250"></canvas>
+        <div class="col-lg-6 h-100" style="text-align:center">
+            <canvas id="graph" width="300" height="200"></canvas>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row h-auto">
         <div class="col-lg-6">
             <div class="row">
-                <div class="col-lg-8">
-                    <h1 id="time-step-counter"></h1>
+                <div class="col-lg-6 pull-left">
+                    <h3 id="time-step-counter"></h3>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <h3 id="active_state"></h3>
                 </div>
                 <div class="col-lg-12">
-                    <strong> &delta; &larr; c + &gamma; v(s') - v(s)</strong> <br>
+                    <!--TD eq'n-->
+                    <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="The Temporal difference error"
+                            data-content="The difference between the estimated value from the next state"
+                    >&delta;</a> &larr; <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="Cumulant (a.k.a Pseudo-reward)"
+                            data-content="The signal of interest we accumulate.">c</a> + &gamma; v(s') - v(s) <br>
                     <p style="display:inline" id="td-td">0</p> &larr; <p style="display:inline" id="td-cumulant">0</p> + <p style="display:inline" id="td-gamma">0</p> * <p style="display:inline" id="td-v-next">0</p> - <p style="display:inline" id="td-v">0</p>
                     <hr>
                     <strong>e &larr; &gamma; &lambda; e + s </strong> <br>
@@ -72,7 +102,7 @@
         </div>
     </div>
     <hr>
-    <div class="row">
+    <div class="row h-auto">
         <div class="col-lg-3" style="text-align: center">
             <b>Question Parameters</b>
             <div class="col-lg-12">
@@ -95,7 +125,7 @@
                 <br>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-6 text-center">
             <button id="play-pause">⏯︎</button>
             <button id="step">⏭︎</button>
             <button id="ff">⏩︎</button>
@@ -103,9 +133,130 @@
         </div>
     </div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="static/js/chart.min.js"></script>
-<script src="static/js/apexcharts.min.js"></script>
-<script src="static/js/simulator.js"></script>
+<div class="col-lg-5 h-100" style="">
+    <div class="" style="overflow-y:scroll;max-height: 100vh">
+
+        <p>
+        Before we come to understand how predictions are made, we first must have an understanding of how we could describe
+        an agent interacting with its environment. The interaction of the agent with the world is formalized as a series
+        of observations and actions. An agent may take an action $a_t$, and be presented with a new observation
+        \(o_{t+1}\). If the problem is, say, a board game, $a_t$ may be them move taken by the agent, and \(o_{t+1}\)
+        might be an encoding of the change in the board resulting from the move. Because the board is
+        <i>fully observable</i> $o_t$  perfectly describes the state of the world.
+        Oftentimes, real-world problems are not fully observable. For instance, imagine a robot interacting with the
+        world where observations $o$ describe the sensor readings available to the robot on a moment-to-moment basis.
+        The world is <i>partially observable</i> to the robot. There are many aspects of the world which are not
+        perceived by the sensors of the robot---e.g., objects outside of its visual field---so $o_t$ in this case
+        does not describe the state of the world, but rather the <i>agent state</i>: the state of the world from
+        the agent's perspective.
+        </p>
+        <p>
+        General Value Functions (GVFs) estimate the future accumulation of a value $c$. In the simplest case, this
+            might be the accumulation of some element of an agent's observation $c \in o$. The discounted sum of  $c$,
+            is called the <i>return</i>, and is defined over discrete time-steps $t = 1,2,3,...,n$  as
+            $G_t = \mathbb{E}_\pi( \sum^\infty_{k=0}(\prod^{k}_{j=1}(\gamma_{t+j}))C_{t+k+1})$---the expectation of how
+            a signal will accumulate over time. What the GVF's prediction is about is determined by its
+            <i>question parameters</i>, including the signal of interest $C$ (often called the <i>cumulant</i>), a
+            discounting function $0 \leq \gamma(o_t, a_t, o_{t+1}) \leq 1$, and a policy $\pi$ which describes the
+            behaviour over which the predictions are made. In the simplest case, the discounting function is a is a
+            constant value that describes the horizon over which a prediction is made. For example if $\gamma=0.9$,
+            then it's corresponding GVF is the accumulation of $c$ over $\frac{1}{1-\gamma} = 10$ time-steps.
+            by making predictions like this, we can anticipate how a signal changes over a period of time.
+        </p>
+        <p>
+            The discounting function and cumulant can also be used to express more complex predictions.
+            For instance, we can specify a GVF that asks the question "How long until we see  <i>x</i>" by using the
+            following cumulant and discount:
+
+\[
+c =
+     \begin{cases}
+       \text{if}\quad o_i = x,  &\quad 1\\
+       \text{else}, &\quad0 \\
+     \end{cases}
+     \label{echo_gvf_c}
+\]\[
+\gamma =
+     \begin{cases}
+       \text{if}\quad c = 1,  &\quad 0\\
+       \text{else}, &\quad0.9 \\
+     \end{cases}
+     \label{echo_gvf_y}
+\]
+
+            This has the effect of counting the time-steps until $o_i$ takes on the value of $x$.
+            There are many more possible ways that cumulants and discounts could be specified, but we choose these two
+            examples to give a flavour of what can be expressed.
+        </p>
+        <p>
+            There is one final question parameter that we haven't discussed yet: the policy $\pi$. We want our
+            predictions to not only be a function of what we observe, but the actions we take. We want our predictions
+            to be able to capture how the environment changes as a response to our own behaviours. To do so, we
+            condition the expectation on the policy, where $\pi(o,a) = \mathbb{P}(o,a)$. That is, the policy describes
+            the probability of taking an action $a$ given observation $o$. for instance, if an agent had three
+            actions---turn left, move forwards, or turn right---we could specify a policy as follows:
+            \[\pi = [0,1,0]\]
+            Which would mean that each prediction would be conditioned on the agent moving forwards.
+            If this were the policy of our counting GVF, the question would then become "how long until we see <i>x</i>
+            if we continue moving forwards"? Possibly the most powerful aspect of General Value Functions is their
+            ability to condition predictions in terms of an agent's actions.
+
+        </p>
+        <p>
+            Having determined how we want to express predictions, need a way to learn these predictions: to estimate
+            their values using the observations and actions available to the agent. General Value Functions can be
+            estimated using typical Value Function approximation methods from computational reinforcement learning.
+            In this context, we consider Temporal-difference learning.
+        <p>
+            In temporal difference learning we estimate a value-function $v$ such that
+            $v(\phi(o_t)) \approx \mathbb{E}_\pi [G_t | o_t]$ : we learn a function that estimates the return at a
+            given time-step given the agent's observations. On each time-step the agent receives a vector of
+            observations $o \in \mathbb{R}^m$ where each $o_i \cdots o_m$ is a different real-valued input. A function
+            approximator $\phi : o \rightarrow \mathbb{R}^n$---such as a neural net, kanerva coder, or tile coder---may
+            be used to encode the observations into a <i>feature vector</i>. The estimate for each time-step
+            $v(\phi(o_t))$ linear combination of learned weights $w\in \mathbb{R}^n$,
+            and the current feature vector--$v(o_t) = w^\top\phi(o_t))$.
+        </p>
+        <p>
+            How do we learn the weights? We need an error metric with which we can adapt the weights over time:
+            a measure to determine how accurate our guess $v(o_t)$ was. In traditional supervised learning,
+            we compare the estimated value to the true value. In this case, we do not yet know the true value
+            of the expected return $G_t$. To compute the true value of the return, we would need collect
+            $c_t \cdots c_n$, where $n$ is is possibly infinite. To resolve this, we estimate the return by
+            <i>bootstrap</i> our estimate. We estimate the value of the return, using our current approximate
+            value-function $v$. That is, $G_t \approx c_t + \gamma(o_t, a_t, a_{t+1}) v(o_{t+1})$. We can then form
+            the temporal-difference error by taking  $\delta_t = c_t + \gamma(o_t, a_t, a_{t+1}) v(o_{t+1}) - v(o_t)$
+            (line 3, Algorithm 1). The more accurate our estimate $v(o_{t+1})$ is, the more accurate our error $\delta$
+            is.  We build the error through which we learn our estimates using our existing estimates. The value
+            function's weights are learned iteratively on each time-step by updating to reduce the temporal-difference
+            error $ w_{t+1} = w_t + \alpha\delta\phi(o_t)$, where the step-size or learning rate is  $0 < \alpha$.
+        </p>
+        <p>
+            We call the parameters of the learning methods <i>answer parameters</i>. Answer parameters change how an
+            agent answers a question. Answer parameters include the step-size\footnote{Also known as the
+            \emph{learning rate}.} $\alpha$ which scales updates to the weights, and the linear or non-linear
+            function-approximator $\phi$ used to construct state.
+        </p>
+    </div>
+
+</div>
+</div>
+</div>
+    <script src="static/js/chart.min.js"></script>
+    <script src="static/js/apexcharts.min.js"></script>
+    <script src="static/js/simulator.js"></script>
+    <script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(document).ready(function() {
+       $('[data-toggle="popover"]').popover({
+          placement: 'top',
+          trigger: 'hover'
+       });
+    });
+    </script>
+
 </body>
 </html>

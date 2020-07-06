@@ -63,9 +63,10 @@ var options = {
             },
         ],
         chart: {
-          height: 350,
+          responsive:true,
+          // height: 350,
           type: 'heatmap',
-          height: '200',
+          // height: '200',
           animations: {
             enabled: false,
             },
@@ -132,41 +133,30 @@ function calculate_return(cumulants, gamma){
     }
 }
 
-function accumulate(){
-    for(var i=0; i< traces.length; i++) {
-        traces[i] = traces[i] * gamma * lambda + phi[i]
-    }
+function accumulate(){ 
+    traces[active_state] = traces[active_state] * gamma * lambda + 1
+    
 }
 
 function calculate_td_error(){
-    v_state = 0;
-    v_state_prime = 0;
-    for(var i=0; i< weights.length; i++) {
-        v_state += weights[i] * phi[i];
-        v_state_prime += weights[i] * phi_next[i];
-    }
-    return cumulant + gamma * v_state_prime - v_state;
+    v_state = weights[active_state];
+    v_state_prime = weights[active_state_next];
+    td_error = cumulant + gamma * v_state_prime - v_state;
 }
 
 function update_weights(){
     w_last = weights[active_state]
-    for(var i=0; i< weights.length; i++) {
-        weights[i] += step_size * traces[i] * td_error;
-    }
+    weights[active_state] += step_size * traces[active_state] * td_error;
 }
 
 function make_prediction(){
-    var v = 0;
-    for(var i=0; i< weights.length; i++) {
-        v += weights[i] * phi[i];
-    }
-    prediction = v
+    prediction = weights[active_state]
 }
 
 
 function td_step(){
     steps += 1;
-    td_error = calculate_td_error();
+    calculate_td_error();
     accumulate();
     update_weights();
     make_prediction()
@@ -201,8 +191,9 @@ function update_state(){
     cumulant = [hand_moving, position, load, current_vel][cumulant_idx];
     phi_next = new Array(memory).fill(0);
     active_state_next = parseInt(parseInt(position)*10+(Math.min(current_vel+1, 1)))
-    phi_next[active_state_next] = 1;
 }
+
+var plot_len = 200
 
 function plot_data(){
     var gamma = document.getElementById("gamma").value
@@ -210,11 +201,11 @@ function plot_data(){
     var ctx = document.getElementById("graph").getContext('2d');
     ctx.responsive = true;
     var time_steps = Array.from(Array(predictions.length).keys())
-    predictions = predictions.slice(-100);
+    predictions = predictions.slice(-plot_len);
     var prediction_plot = predictions
     var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
-    cumulants = cumulants.slice(-100);
-    return_cumulant = return_cumulant.slice(-100);
+    cumulants = cumulants.slice(-plot_len);
+    return_cumulant = return_cumulant.slice(-plot_len);
     var myChart = new Chart(ctx,
                     {
                         type: 'line',
@@ -313,7 +304,7 @@ function precise(x) {
 
 function update_html(){
     document.getElementById("time-step-counter").innerHTML = "Steps: " + steps;
-    document.getElementById("active_state").innerHTML = "Current State: " + active_state
+    document.getElementById("active_state").innerHTML = "State: " + active_state
 
     document.getElementById("td-td").innerHTML = precise(td_error);
     document.getElementById("td-cumulant").innerHTML = precise(cumulant);
@@ -337,8 +328,10 @@ function update_html(){
 
 
 }
-
+// var step_jump = [1,10,50,100,1000]
+var step_jump = [0,1,2,3,4,5]
 function update_simulation(num_steps){
+    num_steps = step_jump[num_steps]
     if (!learning_paused){
         while (num_steps > 0){
             get_data();
@@ -365,6 +358,7 @@ document.getElementById("play-pause").addEventListener("click", function(){
 
 document.getElementById("reset").addEventListener("click", function(){
   weights = new Array(memory).fill(0);
+  traces = new Array(memory).fill(0);
   steps = 0;
 });
 
