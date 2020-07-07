@@ -63,6 +63,9 @@ var options = {
             },
         ],
         chart: {
+          toolbar: {
+            show: false,
+          },
           responsive:true,
           // height: 350,
           type: 'heatmap',
@@ -133,8 +136,11 @@ function calculate_return(cumulants, gamma){
     }
 }
 
-function accumulate(){ 
-    traces[active_state] = traces[active_state] * gamma * lambda + 1
+function accumulate(){
+    for(var i=0; i< traces.length; i++) {
+        traces[i] = traces[i] * gamma * lambda
+    }
+    traces[active_state] += 1
     
 }
 
@@ -165,7 +171,7 @@ function td_step(){
 function log_nonzero(arr){
     var count = 0;
     for(var i=0; i< traces.length; i++) {
-            if (arr[i] == 1){
+            if (arr[i] == 1){ƒ
                 return i
             }
     }
