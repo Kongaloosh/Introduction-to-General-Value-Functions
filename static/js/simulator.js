@@ -201,7 +201,7 @@ function update_state(){
 
 var plot_len = 200
 
-function plot_data(){
+async function plot_data(){
     var gamma = document.getElementById("gamma").value
     var return_cumulant = calculate_return(cumulants, gamma)
     var ctx = document.getElementById("graph").getContext('2d');
@@ -282,7 +282,7 @@ function plot_data(){
 }
 
 
-function weight_chart(){
+async function weight_chart(){
 //    chart.updateSeries(weights)
     chart.updateSeries(
         [
@@ -308,7 +308,7 @@ function precise(x) {
   return Number.parseFloat(x).toPrecision(2);
 }
 
-function update_html(){
+async function update_html(){
     document.getElementById("time-step-counter").innerHTML = "Steps: " + steps;
     document.getElementById("active_state").innerHTML = "State: " + active_state
 
@@ -334,8 +334,7 @@ function update_html(){
 
 
 }
-// var step_jump = [1,10,50,100,1000]
-var step_jump = [0,1,2,3,4,5]
+ var step_jump = [1,2,5,10,30]
 function update_simulation(num_steps){
     num_steps = step_jump[num_steps]
     if (!learning_paused){
@@ -345,11 +344,9 @@ function update_simulation(num_steps){
             td_step();
             predictions.push(prediction);
             cumulants.push(cumulant);
-            plot_data();
-            update_html();
-            weight_chart();
             num_steps--;
         }
+        Promise.all([plot_data(), update_html(), weight_chart()]);
     }
 }
 
@@ -380,9 +377,8 @@ document.getElementById("step").addEventListener("click", function(){
             td_step();
             predictions.push(prediction);
             cumulants.push(cumulant);
-            plot_data();
-            update_html();
-            weight_chart();
+            num_steps--;
+            Promise.all([plot_data(), update_html(), weight_chart()]);
     }
 });
 
