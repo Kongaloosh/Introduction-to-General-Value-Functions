@@ -1,6 +1,6 @@
-var td_errs = [];
-var predictions = [];
-var cumulants = [];
+var td_errs = new Array(200).fill(0);
+var predictions = new Array(200).fill(0);
+var cumulants = new Array(200).fill(0);
 
 var learning_paused = false;
 var speed = 1;
@@ -77,51 +77,70 @@ var options = {
         dataLabels: {
           enabled: false
             },
-//        colors: ["#008FFB"],
-//        title: {
-//            text: 'Weight Vector and Eligibility Traces'
-//            },
          plotOptions: {
             heatmap: {
             distributed: true
             }
           }
-//         plotOptions: {
-//            heatmap: {
-//              shadeIntensity: 0.5,
-//              colorScale: {
-//                ranges: [
-//                  {
-//                    from: 0,
-//                    to: 0.005,
-//                    name: "low",
-//                    color: "#00A100"
-//                  },
-//                  {
-//                    from: 0.005,
-//                    to: 0.05,
-//                    name: "medium",
-//                    color: "#128FD9"
-//                  },
-//                  {
-//                    from: 0.05,
-//                    to: 0.5,
-//                    name: "high",
-//                    color: "#FFB200"
-//                  },
-//                  {
-//                    from: 0.5,
-//                    to: 1,
-//                    name: "extreme",
-//                    color: "#FF0000"
-//                  }
-//                ]
-//              }
-//            }
-//          },
     };
+
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
+
+var graph_options = {
+          series: [{
+          name: "predictions",
+          data: predictions.slice()
+        },
+            {
+                name: 'cumulant',
+                data: cumulants,
+            },
+            {
+                name: 'true return',
+                data: calculate_return(cumulants, gamma),
+            }],
+          chart: {
+          id: 'realtime',
+          height: 350,
+          type: 'line',
+          animations: {
+            enabled: false,
+          },
+          toolbar: {
+            show: false
+          },
+          zoom: {
+            enabled: false
+          },
+        },
+        xaxis : {
+            labels : {
+                show:false
+            }
+        },
+//        yaxis : {
+//            labels : {
+//                show:false
+//            }
+//        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        markers: {
+          size: 0
+        },
+        legend: {
+          show: false
+        },
+        };
+
+var graph = new ApexCharts(document.querySelector("#graph"), graph_options);
+graph.render();
+
 
 function calculate_return(cumulants, gamma){
     var return_cumulant = cumulants.slice();
@@ -132,7 +151,7 @@ function calculate_return(cumulants, gamma){
         return return_cumulant.map(x => x/(1/(1-gamma)))
         return return_cumulant
     }else{
-        return []
+        return new Array(200).fill(0)
     }
 }
 
@@ -202,88 +221,27 @@ function update_state(){
 var plot_len = 200
 
 async function plot_data(){
-    var gamma = document.getElementById("gamma").value
-    var return_cumulant = calculate_return(cumulants, gamma)
-    var ctx = document.getElementById("graph").getContext('2d');
-    ctx.responsive = true;
-    var time_steps = Array.from(Array(predictions.length).keys())
     predictions = predictions.slice(-plot_len);
-    var prediction_plot = predictions
-    var prediction_plot = predictions.map(x => x/(1/(1-gamma)))
     cumulants = cumulants.slice(-plot_len);
-    return_cumulant = return_cumulant.slice(-plot_len);
-    var myChart = new Chart(ctx,
-                    {
-                        type: 'line',
-                        data: {
-                            labels:time_steps,
-                            datasets: [{
-                                label: 'prediction',
-                                data: prediction_plot,
-                                borderWidth: 1,
-                                fill: false,
-                                // borderColor: 'rgb(235, 255, 236)',
-                                // pointBackgroundColor: 'rgb(235, 255, 236)',
-                            },
-                            {
-                                label: 'cumulant',
-                                data: cumulants,
-                                borderColor: 'rgb(148,0,211)',
-                                borderWidth: 1,
-                                fill: false
-
-                            },
-                            {
-                                label: 'true return',
-                                data: return_cumulant,
-                                borderColor: 'rgb(235, 201, 52)',
-                                borderWidth: 1,
-                                fill: false,
-                            }
-                            ]
-                        },
-                        options: {
-                            title: {
-                                display: false,
-                                position: 'top',
-                                text: "Predictions"
-                            },
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: false,
-                                        // fontColor:'rgb(235, 255, 236)',
-                                    },
-                                    gridLines: {
-                                        // color: 'rgb(235, 255, 236, 0.3)',
-                                        display: true,
-                                  },
-                                }],
-                                xAxes: [{
-                                    ticks: {
-                                        // fontColor:'rgb(235, 255, 236)',
-                                    },
-                                    gridLines: {
-                                        // color: 'rgb(235, 255, 236, 0.3)',
-                                        display: true,
-                                  },
-                                }]
-                            },
-                          pointLabels: {
-                            // fontColor: 'white' // labels around the edge like 'Running'
-                          },
-                          animation: {
-                                duration: 0.0
-                            }
-                        }
-                    }
-                    );
-
+    graph.updateSeries(
+         [{
+                name: 'predictions',
+                data: predictions.map(x => precise(x/(1/(1-gamma)))),
+            },
+            {
+                name: 'cumulant',
+                data: cumulants.map(x => precise(x)),
+            },
+            {
+                name: 'true return',
+                data: calculate_return(cumulants, gamma).map(x => precise(x)),
+            }
+            ]
+    )
 }
 
 
 async function weight_chart(){
-//    chart.updateSeries(weights)
     chart.updateSeries(
         [
             {
@@ -305,7 +263,7 @@ function get_data(){
 }
 
 function precise(x) {
-  return Number.parseFloat(x).toPrecision(2);
+  return Number.parseFloat(x).toFixed(2);
 }
 
 async function update_html(){
@@ -334,7 +292,7 @@ async function update_html(){
 
 
 }
- var step_jump = [1,2,5,10,30]
+ var step_jump = [1,2,5,10,20]
 function update_simulation(num_steps){
     num_steps = step_jump[num_steps]
     if (!learning_paused){

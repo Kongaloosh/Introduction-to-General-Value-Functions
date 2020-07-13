@@ -74,7 +74,7 @@
                                 return for previous time-steps."
                         >Learned Prediction vs Signal</a>
                     </strong>
-                    <canvas id="graph" width="300" height="200"></canvas>
+                    <div id="graph" width="300" height="200"></div>
                 </div>
             </div>
 
@@ -195,17 +195,17 @@
                                     data-toggle="popover"
                                     data-placement="top"
                                     title="Cumulant (a.k.a Pseudo-reward)"
+                                    data-content="The signal of interest we accumulate.">w(s)</a> + <a
+                                    href="#"
+                                    data-toggle="popover"
+                                    data-placement="top"
+                                    title="Cumulant (a.k.a Pseudo-reward)"
                                     data-content="The signal of interest we accumulate.">&alpha;</a> <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
                                     title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">&delta;</a> <a
-                                    href="#"
-                                    data-toggle="popover"
-                                    data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">w(s)</a> </strong> <br>
+                                    data-content="The signal of interest we accumulate.">&delta;</a> </strong> <br>
                             <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> +
                             <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
                         </div>
@@ -414,7 +414,9 @@
     </div>
 </div>
 <script src="static/js/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="static/js/apexcharts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-apexcharts"></script>
 <script src="static/js/simulator.js"></script>
 <script>
     $(document).ready(function(){
