@@ -88,10 +88,11 @@ var chart = new ApexCharts(document.querySelector("#chart"), options);
 chart.render();
 
 var graph_options = {
+          colors: [	 '#999999', '#9932CC', '#ffa500'],
           series: [{
           name: "predictions",
           data: predictions.slice()
-        },
+            },
             {
                 name: 'cumulant',
                 data: cumulants,
@@ -293,6 +294,18 @@ async function update_html(){
 
 }
  var step_jump = [1,2,5,10,20]
+
+
+
+async function update_bento(){
+    var increment_degree = 3.6
+    var bento = document.getElementById("bento-arm");
+    bento.style.transform = "rotate("+ (position*3.6).toString() +"deg)";
+
+
+}
+
+
 function update_simulation(num_steps){
     num_steps = step_jump[num_steps]
     if (!learning_paused){
@@ -304,7 +317,7 @@ function update_simulation(num_steps){
             cumulants.push(cumulant);
             num_steps--;
         }
-        Promise.all([plot_data(), update_html(), weight_chart()]);
+        Promise.all([plot_data(), update_html(), weight_chart(), update_bento()]);
     }
 }
 
