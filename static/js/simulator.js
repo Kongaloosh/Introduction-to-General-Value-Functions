@@ -208,19 +208,15 @@ function update_state(){
         current_vel = velocity;
     }
 
+
     if (position <= 50 && position >= 30){
         hand_moving = 1;
-
+        hand_position = Math.max(0, hand_position + current_vel*2);
     }else{
         hand_moving = 0;
     }
 
     position += current_vel;
-    hand_position += current_vel;
-
-    console.log(position, hand_position
-
-    )
 
     cumulant = [hand_moving, position, load, current_vel][cumulant_idx];
     phi_next = new Array(memory).fill(0);
@@ -347,12 +343,11 @@ async function update_bento(){
     bento.style.transform = "rotate("+ (position*3.6).toString() +"deg)";
     bento.style.transformOrigin = "bottom center"
 
-    if (hand_moving){
-        var bento = document.getElementById("layer11");
-        bento.style.transformOrigin = "100% 100%"
-        bento.style.transformBox= "fill-box"
-        bento.style.transform = "rotate("+ (-hand_position) + "deg)";
-    }
+    var bento = document.getElementById("layer11");
+    bento.style.transformOrigin = "100% 100%"
+    bento.style.transformBox= "fill-box"
+    bento.style.transform = "rotate("+ (-hand_position) + "deg)";
+
 
 
 }
