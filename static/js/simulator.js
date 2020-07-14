@@ -68,7 +68,7 @@ var options = {
             show: false,
           },
           responsive:true,
-          // height: 350,
+           height: 150,
           type: 'heatmap',
           // height: '200',
           animations: {
@@ -104,7 +104,7 @@ var graph_options = {
             }],
           chart: {
           id: 'realtime',
-          height: 350,
+//          height: 350,
           type: 'line',
           animations: {
             enabled: false,
@@ -268,7 +268,7 @@ function get_data(){
 }
 
 function precise(x) {
-  return Number.parseFloat(x).toFixed(2);
+  return Number.parseFloat(x).toFixed(3);
 }
 
 async function update_html(){
@@ -343,7 +343,7 @@ async function update_bento(){
     bento.style.transform = "rotate("+ (position*3.6).toString() +"deg)";
     bento.style.transformOrigin = "bottom center"
 
-    var bento = document.getElementById("layer11");
+    var bento = document.getElementById("chopstick-gripper");
     bento.style.transformOrigin = "100% 100%"
     bento.style.transformBox= "fill-box"
     bento.style.transform = "rotate("+ (-hand_position) + "deg)";
