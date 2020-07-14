@@ -53,6 +53,7 @@ var states = ["is hand moving", "shoulder position", "load", "shoulder velocity"
         }
     $("#cumulant").empty().append(this_select_content);
 
+
 var options = {
         series: [
             {
@@ -405,5 +406,5 @@ document.getElementById("step").addEventListener("click", function(){
 
 document.getElementById("cumulant").addEventListener("change", function() {
     cumulant_idx = document.getElementById("cumulant").selectedIndex;
-    cumulants = [];
+    cumulants = new Array(200).fill(0);
 });
