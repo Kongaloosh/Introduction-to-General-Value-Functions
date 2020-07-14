@@ -138,7 +138,7 @@ var graph_options = {
           size: 0
         },
         legend: {
-          show: false
+          show: true
         },
         };
 
