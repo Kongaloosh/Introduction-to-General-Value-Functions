@@ -22,6 +22,7 @@ var active_state = 0;
 var active_state_next = 0;
 
 var position = 0;
+var hand_position = 0;
 var load = 0;
 var velocity = 1;
 var hand_moving = 0;
@@ -44,7 +45,7 @@ document.getElementById("lambda").value = lambda;
 document.getElementById("gamma").value = gamma;
 document.getElementById("step_size").value = step_size;
 
-var states = ["is moving", "position", "load", "velocity"];
+var states = ["is hand moving", "shoulder position", "load", "shoulder velocity"];
     var this_select_content = '';
     for(var i=0; i < states.length; i++){
         this_select_content += '<option value="' + states[i] + '">' + states[i] + '</option>';
@@ -193,26 +194,33 @@ function log_nonzero(arr){
     for(var i=0; i< traces.length; i++) {
             if (arr[i] == 1){ƒ
                 return i
-            }
+        }
     }
 }
 
 function update_state(){
     phi = phi_next;
     active_state = active_state_next;
+
     if (position >= 50){
         current_vel = -1 * velocity;
     }else if (position <= 0){
         current_vel = velocity;
     }
 
-    position += current_vel;
-
-    if (position >= 35){
+    if (position <= 50 && position >= 30){
         hand_moving = 1;
+
     }else{
         hand_moving = 0;
     }
+
+    position += current_vel;
+    hand_position += current_vel;
+
+    console.log(position, hand_position
+
+    )
 
     cumulant = [hand_moving, position, load, current_vel][cumulant_idx];
     phi_next = new Array(memory).fill(0);
@@ -287,13 +295,49 @@ async function update_html(){
     document.getElementById("w-alpha").innerHTML = precise(step_size)
     document.getElementById("w-td").innerHTML = precise(td_error)
 
-    document.getElementById("shoulder-pos").innerHTML = "Shoulder position: " + position;
-    document.getElementById("shoulder-vel").innerHTML = "Shoulder velocity: " + current_vel;
-    document.getElementById("hand-move").innerHTML = "Is Hand Moving: " + hand_moving;
-
-
 }
  var step_jump = [1,2,5,10,20]
+
+
+function getCurrentRotationFixed(elid ) {
+  var el = document.getElementById(elid);
+  var st = window.getComputedStyle(el, null);
+  var tr = st.getPropertyValue("-webkit-transform") ||
+       st.getPropertyValue("-moz-transform") ||
+       st.getPropertyValue("-ms-transform") ||
+       st.getPropertyValue("-o-transform") ||
+       st.getPropertyValue("transform") ||
+       "fail...";
+
+  if( tr !== "none") {
+    var values = tr.split('(')[1];
+      values = values.split(')')[0];
+      values = values.split(',');
+    var a = values[0];
+    var b = values[1];
+    var c = values[2];
+    var d = values[3];
+
+    var scale = Math.sqrt(a*a + b*b);
+
+    // First option, don't check for negative result
+    // Second, check for the negative resulta
+    /** /
+    var radians = Math.atan2(b, a);
+    var angle = Math.round( radians * (180/Math.PI));
+    /*/
+    var radians = Math.atan2(b, a);
+    if ( radians < 0 ) {
+      radians += (2 * Math.PI);
+    }
+    var angle = Math.round( radians * (180/Math.PI));
+    /**/
+
+  } else {
+    var angle = 0;
+  }
+  return angle
+}
 
 
 
@@ -301,6 +345,14 @@ async function update_bento(){
     var increment_degree = 3.6
     var bento = document.getElementById("bento-arm");
     bento.style.transform = "rotate("+ (position*3.6).toString() +"deg)";
+    bento.style.transformOrigin = "bottom center"
+
+    if (hand_moving){
+        var bento = document.getElementById("layer11");
+        bento.style.transformOrigin = "100% 100%"
+        bento.style.transformBox= "fill-box"
+        bento.style.transform = "rotate("+ (-hand_position) + "deg)";
+    }
 
 
 }
