@@ -48,10 +48,10 @@
 <div class="container" style="min-width: 100%">
     <div class="row h-100">
         <div class="col-lg-7 col-md-7 col-sm-12">
-            <div class="row h-auto">
+            <div class="row h-auto" style="padding:10px;">
                 <div class="col-lg-6 col-md-6 col-sm-6  flex-fill" id="system_state" style="text-align:center">
                     <div class="row flexbox text-center">
-                        <div class="col-lg-8 flex-fill d-flex h-100 flex-column" style="padding:10px;min-height:400px">
+                        <div class="col-lg-8 flex-fill d-flex h-100 flex-column" style="min-height:400px">
                             <div class="row text-center">
                                 <strong>
                                     <a
@@ -273,12 +273,12 @@
                             </p> - <p style="display:inline" id="td-v">0</p>
                             <hr>
                             <strong>
-                                <!--Elegibility trace description-->
+                                <!--Eligibility trace description-->
                                 <a
                                         href="#"
                                         data-toggle="popover"
                                         data-placement="top"
-                                        title="Elegibility Traces"
+                                        title="Eligibility Traces"
                                         data-content="Trace of state visitation in the current state s.">
                                     e(s)
                                 </a>
@@ -295,60 +295,76 @@
                                     &gamma;
                                 </a>
                                 <a
-                                        href="#"
-                                        data-toggle="popover"
-                                        data-placement="top"
-                                        title="Lambda, the eligibility decay."
-                                        data-content="Todo.">&lambda;</a> <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">e(s)</a> + <a
+                                    title="Lambda, the eligibility decay."
+                                    data-content="Todo.">&lambda;</a> <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">1</a> </strong> <br>
+                                    title="todo"
+                                    data-content="todo">e(s)</a> + <a
+                                    href="#"
+                                    data-toggle="popover"
+                                    data-placement="top"
+                                    title="todo"
+                                    data-content="todo">1</a> </strong> <br>
                             <p style="display:inline" id="e-e">0</p> &larr; <p style="display:inline" id="e-gamma">0</p>
                             * <p style="display:inline" id="e-lambda">0</p> * <p style="display:inline" id="e-e2">0</p>
-                            + <p style="display:inline" id="e-phi">0</p>
+                            + <p style="display:inline" id="e-phi">1</p>
                             <hr>
                             <strong>
                                 <a
-                                        href="#"
-                                        data-toggle="popover"
-                                        data-placement="top"
-                                        title="Cumulant (a.k.a Pseudo-reward)"
-                                        data-content="The signal of interest we accumulate.">w(s)</a> &larr; <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">w(s)</a> + <a
+                                    title="Value of state S (after update)"
+                                    data-content="The value of state S after it has been updated using the experience
+                                    from the current time-step.">v(s)</a> &larr; <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">&alpha;</a> <a
+                                    title="Value of state S (before update)"
+                                    data-content="The value of state s before we update it.">v(s)</a> + <a
                                     href="#"
                                     data-toggle="popover"
                                     data-placement="top"
-                                    title="Cumulant (a.k.a Pseudo-reward)"
-                                    data-content="The signal of interest we accumulate.">&delta;</a> </strong> <br>
+                                    title="Step-size (a.k.a learning rate)"
+                                    data-content="A scaling factor that determines the amount by which we reduce the
+                                    error for this particular time-step.">&alpha;</a> <a
+                                    href="#"
+                                    data-toggle="popover"
+                                    data-placement="top"
+                                    title="Temporal-difference error"
+                                    data-content="Using the previously calculated TD error &delta;, we update the
+                                    weights for the given state, moving them in a direction to reduce the error for
+                                    this time-step.">&delta;</a> </strong> <br>
                             <p style="display:inline" id="w-w">0</p> &larr; <p style="display:inline" id="w-w2">0</p> +
                             <p style="display:inline" id="w-alpha">0</p> * <p style="display:inline" id="w-td">0</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 text-center">
-                    <a
+                    <strong>
+                        <a
                             href="#"
                             data-toggle="popover"
                             data-placement="top"
-                            title="Cumulant (a.k.a Pseudo-reward)"
-                            data-content="The signal of interest we accumulate."><strong>Weight Vector & Elegibilty
-                        Traces</strong></a>
+                            title="Learned weights: where we store the predictions"
+                            data-content="The Weight vector is where we store our estimates V(s). We have an array whose
+                            length is the number of states |S|. When we are performing an update, we adjust the value of
+                            the weight corresponding to the state. This is considered a tabular representation of the
+                            world: an agent maintains a table. However, we can use many different kinds of
+                            representations, such as those constructed by neural nets.
+
+                            ">Weight Vector</a> & <a
+                            href="#"
+                            data-toggle="popover"
+                            data-placement="top"
+                            title="todo"
+                            data-content="todo">Elegibilty
+                        Traces</a></strong>
                     <div style="max-height:150px" id="chart">
                     </div>
                 </div>
@@ -363,8 +379,13 @@
                             href="#"
                             data-toggle="popover"
                             data-placement="top"
-                            title="The Temporal difference error"
-                            data-content="The difference between the estimated value from the next state"
+                            title="What a prediction is about"
+                            data-content="The question parameters determine what a predictive question is about.
+                            The cumulant c determines what the signal of interest is: it can be any signal available to
+                            the agent from the environment, or its own learning processes. The discount parameter &gamma;
+                            determines what kind of accumulation the value function is approximating. In this case we
+                            consider only constant discounts. For constant discounts, the &gamma; can be thought of as
+                            describing the horizon over which a prediction is being made, where horizon = 1/(1-&gamma;)."
                     ><b>Question Parameters</b></a>
                     <div class="col-lg-12">
                         c : <select id="cumulant"></select>
@@ -380,8 +401,11 @@
                             href="#"
                             data-toggle="popover"
                             data-placement="top"
-                            title="The Temporal difference error"
-                            data-content="The difference between the estimated value from the next state"
+                            title="How the answer is learned"
+                            data-content="These parameters determine modify how the learning algorithm operates.
+                            The step-size &alpha; specifies the amount by which the TD-error &delta; is used to update
+                            the weights on each time-step. The eligibility decay &lambda; determines how much previous
+                            states are updated based on the current observation."
                     >
                         <b>Answer Parameters</b>
                     </a>

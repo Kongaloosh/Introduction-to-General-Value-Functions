@@ -14,7 +14,7 @@ var phi = new Array(memory).fill(0);
 var phi_next = new Array(memory).fill(0);
 var gamma = 0.9;
 var lambda = 0.9;
-var step_size = 0.4;
+var step_size = 0.2;
 var prediction = 0;
 var v_state = 0;
 var v_state_prime = 0;
@@ -30,6 +30,7 @@ var cumulant_idx = 0;
 var cumulant = 0;
 var current_vel = 0;
 var w_last = 0;
+var e_last = 0;
 
 
 var subindices = [];
@@ -158,6 +159,7 @@ function calculate_return(cumulants, gamma){
 }
 
 function accumulate(){
+    e_last = traces[active_state]
     for(var i=0; i< traces.length; i++) {
         traces[i] = traces[i] * gamma * lambda
     }
@@ -284,7 +286,7 @@ async function update_html(){
     document.getElementById("e-e").innerHTML = precise(traces[active_state])
     document.getElementById("e-gamma").innerHTML = precise(gamma)
     document.getElementById("e-lambda").innerHTML = precise(lambda)
-    document.getElementById("e-e2").innerHTML = precise(traces[active_state])
+    document.getElementById("e-e2").innerHTML = precise(e_last)
 
     document.getElementById("w-w").innerHTML = precise(w_last)
     document.getElementById("w-w2").innerHTML = precise(weights[active_state])
@@ -381,6 +383,7 @@ document.getElementById("reset").addEventListener("click", function(){
   weights = new Array(memory).fill(0);
   traces = new Array(memory).fill(0);
   steps = 0;
+  Promise.all([plot_data(), update_html(), weight_chart()]);
 });
 
 document.getElementById("ff").addEventListener("click", function(){
